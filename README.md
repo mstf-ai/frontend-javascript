@@ -14,5 +14,5 @@ This project demonstrates creating a TypeScript interface and rendering a table 
 1. Install dependencies:
    ```bash
    npm install
----
+
 
