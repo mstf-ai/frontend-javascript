@@ -1,61 +1,30 @@
-// task_2/js/main.ts
+interface Director {
+  workDirectorTasks(): string;
+}
 
-/** ====== Task 6: Functions for Employees ====== **/
-
-// Teacher interface (يمكن نسخه من المهمة السابقة)
 interface Teacher {
-  firstName: string;
-  lastName: string;
-  fullTimeEmployee: boolean;
-  location: string;
-  workTeacherTasks(): void;
+  workTeacherTasks(): string;
 }
 
-// Director interface extends Teacher
-interface Director extends Teacher {
-  numberOfReports: number;
-  workDirectorTasks(): void;
+export function createEmployee(salary: number | string): Director | Teacher {
+  if (typeof salary === 'number' && salary < 500) {
+    return { workTeacherTasks: () => 'Getting to work' };
+  } else {
+    return { workDirectorTasks: () => 'Getting to director tasks' };
+  }
 }
 
-// Type predicate function
-function isDirector(employee: Teacher | Director): employee is Director {
-  return (employee as Director).numberOfReports !== undefined;
+export function isDirector(employee: Director | Teacher): employee is Director {
+  return (employee as Director).workDirectorTasks !== undefined;
 }
 
-// executeWork function
-function executeWork(employee: Teacher | Director) {
+export function executeWork(employee: Director | Teacher): string {
   if (isDirector(employee)) {
-    employee.workDirectorTasks();
-  } else {
-    employee.workTeacherTasks();
+    return employee.workDirectorTasks();
   }
+  return employee.workTeacherTasks();
 }
 
-// createEmployee helper for testing
-function createEmployee(salary: number): Teacher | Director {
-  if (salary > 500) {
-    return {
-      firstName: "John",
-      lastName: "Doe",
-      location: "London",
-      fullTimeEmployee: true,
-      numberOfReports: 17,
-      workDirectorTasks: () => console.log("Getting to director tasks"),
-      workTeacherTasks: () => console.log("Getting to work"),
-    };
-  } else {
-    return {
-      firstName: "Jane",
-      lastName: "Smith",
-      location: "Paris",
-      fullTimeEmployee: true,
-      workTeacherTasks: () => console.log("Getting to work"),
-    };
-  }
-}
-
-// Test examples
-executeWork(createEmployee(200));   // Getting to work
-executeWork(createEmployee(1000));  // Getting to director tasks
-
-  
+// --- Test examples (optional for local testing) ---
+console.log(executeWork(createEmployee(200)));  // Output: Getting to work
+console.log(executeWork(createEmployee(1000))); // Output: Getting to director tasks
